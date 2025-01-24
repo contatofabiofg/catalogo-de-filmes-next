@@ -1,0 +1,67 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+:root {
+  --background: #272727;
+  --foreground: #e6e6e6;
+  font-family: 'Roboto', sans-serif;
+}
+
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+ 
+}
+
+h1 {
+  @apply
+  text-[20px] lg:text-[40px] font-bold
+}
+
+h2 {
+  @apply
+  text-[25px] font-bold
+}
+
+h3 {
+  @apply
+  text-[15px]
+}
+
+.botaoTipoDeBusca {
+  @apply
+  lg:w-[200px] lg:h-[60px] p-3 text-sm flex justify-center items-center bg-zinc-700 hover:bg-yellow-500 hover:text-black duration-100
+}
+
+.meuSelect, .meuInput {
+  @apply
+  w-[100%] lg:w-[370px] p-2 outline-none bg-zinc-700 
+}
+
+
+
+.cardFilme {
+  @apply
+  bg-zinc-700 hover:bg-zinc-600 p-2 lg:p-4 w-[47%] lg:w-[13%] flex flex-col items-center 
+  hover:scale-105 duration-100 cursor-pointer
+}
+
+
+
+.cardSessao {
+  @apply bg-zinc-700 p-3 pt-10 my-10 relative
+}
+
+.botaoGenero {
+  @apply
+  w-[32%] lg:w-[170px] p-2 lg:h-[40px] text-sm flex justify-center items-center bg-zinc-700 hover:bg-yellow-500 hover:text-black duration-100
+}
+
+.botaoBuscarMais {
+  @apply
+  w-full lg:w-[32%] lg:w-[170px] p-2 lg:h-[40px] text-sm flex justify-center items-center bg-zinc-700 hover:bg-yellow-500 hover:text-black duration-100
+}

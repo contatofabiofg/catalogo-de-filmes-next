@@ -1,0 +1,6 @@
+{
+  "rewrites":  [
+    { "source": "/filme/:id", "destination": "/filme/[id]" },
+    { "source": "/(.*)", "destination": "/$1" }
+  ]
+}
