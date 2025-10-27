@@ -41,7 +41,13 @@ export default function Home() {
       const id_diretor = dados.value;
 
       api
-        .get("/filmes/diretor/" + id_diretor)
+        .get("/filmes/", {
+          params: {
+            call: 'getFilmesPorDiretor',
+            id: id_diretor,
+          }
+        }
+        )
         .then((response) => {
           setFilmes(response.data.filmes);
           setLoading(false);
@@ -54,8 +60,13 @@ export default function Home() {
       const id_ator = dados.value;
 
       api
-        .get("/filmes/ator/" + id_ator)
-        .then((response) => {
+        .get("/filmes/", {
+          params: {
+            call: 'getFilmesPorAtor',
+            id: id_ator,
+          }
+        }
+        ).then((response) => {
           setFilmes(response.data.filmes);
           setLoading(false);
         })
@@ -70,11 +81,13 @@ export default function Home() {
     setLoading(true);
     console.log('chamou')
     api
-      .get("/filmes", {
+      .get("/filmes/", {
         params: {
+          call: 'getAllFilmes',
           offset: 0,
-        },
-      })
+        }
+      }
+      )
       .then((response) => {
         setFilmes(response.data.filmes);
         if (response.data.filmes.length === 10) {
@@ -97,6 +110,7 @@ export default function Home() {
     api
       .get("/diretores")
       .then((response) => {
+
         const diretoresFormatado = response.data.diretores.map(
           (diretor: IDiretor) => {
             return { value: diretor.id_diretor, label: diretor.nome };
@@ -140,6 +154,7 @@ export default function Home() {
     api
       .get("/filmes", {
         params: {
+          call: 'getAllFilmes',
           offset: offset,
         },
       })
@@ -165,7 +180,13 @@ export default function Home() {
     setLoading(true);
     setGeneroSelecionado(id_genero);
     api
-      .get("/filmes/genero/" + id_genero)
+      .get("/filmes/", {
+        params: {
+          call: 'getFilmesPorGenero',
+          id: id_genero,
+        }
+      }
+      )
       .then((response) => {
         setFilmes(response.data.filmes);
         setLoading(false);
@@ -275,8 +296,8 @@ export default function Home() {
                 <button
                   key={`generoBotao${index}`}
                   className={`botaoGenero ${generoSelecionado === genero.id_genero
-                      ? "!bg-yellow-500 text-black"
-                      : ""
+                    ? "!bg-yellow-500 text-black"
+                    : ""
                     }`}
                   onClick={() => buscarFilmesPeloGenero(genero.id_genero)}
                 >
