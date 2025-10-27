@@ -1,6 +1,5 @@
 "use client";
 
-import axios from "axios";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { CardSessao } from "@/app/components/CardSessao";
@@ -11,6 +10,7 @@ import { IAtor } from "@/app/interfaces/ator";
 import { IGenero } from "@/app/interfaces/genero";
 import Image from "next/image";
 import Link from 'next/link';
+import { api } from "../../services/axios";
 
 export default function Filme() {
   const id = usePathname().split("/")[2];
@@ -21,7 +21,7 @@ export default function Filme() {
   useEffect(() => {
     if (id) {
       // Verifique se 'id' está disponível antes de fazer a requisição
-      axios
+      api
         .get(process.env.NEXT_PUBLIC_SERVIDOR + `/filme/${id}`)
         .then((response) => {
           console.log(response.data);
@@ -31,7 +31,7 @@ export default function Filme() {
           console.error("Erro na requisição:", error);
         });
 
-      axios
+      api
         .get(process.env.NEXT_PUBLIC_SERVIDOR + `/atores/filme/${id}`)
         .then((response) => {
           setAtores(response.data.atores);
@@ -40,7 +40,7 @@ export default function Filme() {
           console.error("Erro na requisição:", error);
         });
 
-      axios
+      api
         .get(process.env.NEXT_PUBLIC_SERVIDOR + `/filme/generos/${id}`)
         .then((response) => {
           setGeneros(response.data.generos);

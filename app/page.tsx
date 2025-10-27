@@ -68,6 +68,7 @@ export default function Home() {
 
   const buscarTodosOsFilmes = useCallback(() => {
     setLoading(true);
+    console.log('chamou')
     api
       .get("/filmes", {
         params: {
@@ -90,8 +91,9 @@ export default function Home() {
         setLoading(false);
       });
   }, []);
-  
+
   const buscarDiretores = useCallback(() => {
+    console.log('chamou 1')
     api
       .get("/diretores")
       .then((response) => {
@@ -106,8 +108,9 @@ export default function Home() {
         console.error("Erro na requisição:", error);
       });
   }, []);
-  
+
   const buscarAtores = useCallback(() => {
+    console.log('chamou 2')
     api
       .get("/atores")
       .then((response) => {
@@ -120,8 +123,9 @@ export default function Home() {
         console.error("Erro na requisição:", error);
       });
   }, []);
-  
+
   const buscarGeneros = useCallback(() => {
+    console.log('chamou 3')
     api
       .get("/generos")
       .then((response) => {
@@ -172,14 +176,14 @@ export default function Home() {
       });
   }
 
-  useEffect(() => {   
-      buscarTodosOsFilmes();
-      buscarDiretores();
-      buscarAtores();
-      buscarGeneros(); 
-    
+  useEffect(() => {
+    buscarTodosOsFilmes();
+    buscarDiretores();
+    buscarAtores();
+    buscarGeneros();
+
   }, [buscarTodosOsFilmes, buscarDiretores, buscarAtores, buscarGeneros]);
-  
+
 
   return (
     <div className="m-6 mt-8">
@@ -270,11 +274,10 @@ export default function Home() {
               {generos.map((genero: IGenero, index) => (
                 <button
                   key={`generoBotao${index}`}
-                  className={`botaoGenero ${
-                    generoSelecionado === genero.id_genero
+                  className={`botaoGenero ${generoSelecionado === genero.id_genero
                       ? "!bg-yellow-500 text-black"
                       : ""
-                  }`}
+                    }`}
                   onClick={() => buscarFilmesPeloGenero(genero.id_genero)}
                 >
                   {genero.descricao}
