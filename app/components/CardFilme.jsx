@@ -1,16 +1,19 @@
 import { useRouter } from 'next/navigation'
+import { Calendar, Clapperboard } from "lucide-react";
 import Link from 'next/link';
 
 export function CardFilme({ filme }) {
 
     const router = useRouter()
 
-    return(
+    return (
         <div className="cardFilme">
-             <Link href={`/filme/${filme.id_filme}`}>
-            <img src={filme.cartaz} alt={"Cartaz do filme"}  />
-            <h3 className="font-bold mt-2 text-center">{filme.titulo}</h3>
-            <h3 className='text-center'>Ano: {filme.ano}</h3>
+            <Link href={`/filme/${filme.id_filme}`}>
+
+                <img src={filme.cartaz} alt={"Cartaz do filme"} className='' />
+                <p className="mt-2 flex items-start  gap-1 w-full"> <Clapperboard width={14} className='min-w-[14px] -mt-1' /> {filme.titulo}</p>
+                <p className="mt-2  w-full">{filme.nome_diretor}</p>
+                <p className='flex gap-1 w-full '><Calendar width={14} className='min-w-[14px] -mt-1' /> {filme.ano}</p>
             </Link>
         </div>
     )

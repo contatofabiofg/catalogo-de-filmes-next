@@ -1,0 +1,160 @@
+// Mock da API antes de tudo
+jest.mock('../services/axios', () => ({
+  api: {
+    get: jest.fn(),
+    post: jest.fn(),
+    put: jest.fn(),
+    delete: jest.fn(),
+  },
+}))
+
+import { render, screen, waitFor } from '@testing-library/react'
+import { userEvent } from '@testing-library/user-event'
+import Home from '../page'
+import { api } from '../services/axios'
+
+const mockApiGet = api.get as jest.MockedFunction<typeof api.get>
+
+// Mock dos dados
+const mockFilmes = [
+  {
+    id_filme: 1,
+    titulo: 'Filme Teste 1',
+    cartaz: 'https://example.com/poster1.jpg',
+    nome_diretor: 'Diretor Teste 1',
+    ano: 2023,
+  },
+  {
+    id_filme: 2,
+    titulo: 'Filme Teste 2',
+    cartaz: 'https://example.com/poster2.jpg',
+    nome_diretor: 'Diretor Teste 2',
+    ano: 2022,
+  },
+]
+
+const mockDiretores = [
+  { id_diretor: 1, nome: 'Diretor Teste 1' },
+  { id_diretor: 2, nome: 'Diretor Teste 2' },
+]
+
+const mockAtores = [
+  { id_ator: 1, nome: 'Ator Teste 1' },
+  { id_ator: 2, nome: 'Ator Teste 2' },
+]
+
+const mockGeneros = [
+  { id_genero: 1, descricao: 'Ação' },
+  { id_genero: 2, descricao: 'Comédia' },
+]
+
+describe('Home Page', () => {
+  beforeEach(() => {
+    jest.clearAllMocks()
+    mockApiGet.mockImplementation((url: any) => {
+      if (url === '/filmes/') {
+        return Promise.resolve({
+          data: { filmes: mockFilmes },
+        })
+      }
+      if (url === '/diretores') {
+        return Promise.resolve({
+          data: { diretores: mockDiretores },
+        })
+      }
+      if (url === '/atores') {
+        return Promise.resolve({
+          data: { atores: mockAtores },
+        })
+      }
+      if (url === '/generos') {
+        return Promise.resolve({
+          data: { generos: mockGeneros },
+        })
+      }
+      return Promise.reject(new Error('URL não encontrada'))
+    })
+  })
+
+  it('deve renderizar a página inicial com os botões de filtro', async () => {
+    render(<Home />)
+
+    // Verificar botões de filtro
+    expect(screen.getByText('TODOS OS FILMES')).toBeInTheDocument()
+    expect(screen.getByText('BUSCA POR DIRETOR')).toBeInTheDocument()
+    expect(screen.getByText('BUSCA POR ATOR')).toBeInTheDocument()
+    expect(screen.getByText('BUSCA POR GÊNERO')).toBeInTheDocument()
+  })
+
+  it('deve carregar filmes ao montar o componente', async () => {
+    render(<Home />)
+
+    await waitFor(() => {
+      expect(mockApiGet).toHaveBeenCalledWith('/filmes/', {
+        params: { call: 'getAllFilmes', offset: 0 },
+      })
+    })
+
+    await waitFor(() => {
+      expect(screen.getByText('Filme Teste 1')).toBeInTheDocument()
+      expect(screen.getByText('Filme Teste 2')).toBeInTheDocument()
+    })
+  })
+
+  it('deve mostrar select de diretor ao clicar na busca por diretor', async () => {
+    const user = userEvent.setup()
+    render(<Home />)
+
+    const diretorButton = screen.getByText('BUSCA POR DIRETOR')
+    await user.click(diretorButton)
+
+    await waitFor(() => {
+      expect(screen.getByTestId('react-select')).toBeInTheDocument()
+      expect(screen.getByText('Selecione o Diretor')).toBeInTheDocument()
+    })
+  })
+
+  it('deve mostrar botões de gênero ao clicar na busca por gênero', async () => {
+    const user = userEvent.setup()
+    render(<Home />)
+
+    const generoButton = screen.getByText('BUSCA POR GÊNERO')
+    await user.click(generoButton)
+
+    await waitFor(() => {
+      expect(screen.getByText('Ação')).toBeInTheDocument()
+      expect(screen.getByText('Comédia')).toBeInTheDocument()
+    })
+  })
+
+  it('deve destacar o botão ativo corretamente', () => {
+    render(<Home />)
+
+    const todosButton = screen.getByText('TODOS OS FILMES').closest('button')
+    expect(todosButton).toHaveClass('!bg-yellow-500')
+  })
+
+  it('deve buscar filmes por diretor selecionado', async () => {
+    const user = userEvent.setup()
+    render(<Home />)
+
+    // Mudar para busca por diretor
+    const diretorButton = screen.getByText('BUSCA POR DIRETOR')
+    await user.click(diretorButton)
+
+    // Aguardar o select aparecer
+    await waitFor(() => {
+      expect(screen.getByTestId('react-select')).toBeInTheDocument()
+    })
+
+    // Selecionar um diretor
+    const select = screen.getByTestId('react-select')
+    await user.selectOptions(select, '1')
+
+    await waitFor(() => {
+      expect(mockApiGet).toHaveBeenCalledWith('/filmes/', {
+        params: { call: 'getFilmesPorDiretor', id: 1 },
+      })
+    })
+  })
+})

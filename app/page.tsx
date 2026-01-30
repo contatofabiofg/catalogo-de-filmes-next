@@ -12,6 +12,9 @@ import { IReactSelect } from "./interfaces/reactSelect";
 import { IAtor } from "./interfaces/ator";
 import { IFilme } from "./interfaces/filme";
 import { IGenero } from "./interfaces/genero";
+import { Clapperboard, Drama, Film, UserStar } from "lucide-react";
+//import Spline from '@splinetool/react-spline';
+
 
 export default function Home() {
   const [loading, setLoading] = useState(false);
@@ -38,7 +41,7 @@ export default function Home() {
     setLoading(true);
 
     if (categoria == "diretor") {
-      const id_diretor = dados.value;
+      const id_diretor = parseInt(dados.value as string);
 
       api
         .get("/filmes/", {
@@ -106,14 +109,14 @@ export default function Home() {
   }, []);
 
   const buscarDiretores = useCallback(() => {
-    console.log('chamou 1')
+
     api
       .get("/diretores")
       .then((response) => {
 
         const diretoresFormatado = response.data.diretores.map(
           (diretor: IDiretor) => {
-            return { value: diretor.id_diretor, label: diretor.nome };
+            return { value: diretor.id_diretor * 1, label: diretor.nome };
           }
         );
         setDiretores(diretoresFormatado);
@@ -124,7 +127,6 @@ export default function Home() {
   }, []);
 
   const buscarAtores = useCallback(() => {
-    console.log('chamou 2')
     api
       .get("/atores")
       .then((response) => {
@@ -159,6 +161,7 @@ export default function Home() {
         },
       })
       .then((response) => {
+        console.log(offset);
         const filmesRetorno = response.data.filmes as IFilme[];
         setFilmes((filmes) => [...filmes, ...filmesRetorno]);
         if (response.data.filmes.length == 10) {
@@ -176,6 +179,7 @@ export default function Home() {
   }
 
   function buscarFilmesPeloGenero(id_genero: number) {
+    console.log('buscou pelo gênero')
     setFilmes([]);
     setLoading(true);
     setGeneroSelecionado(id_genero);
@@ -188,6 +192,7 @@ export default function Home() {
       }
       )
       .then((response) => {
+        console.log('chamou getFilmesPorGenero')
         setFilmes(response.data.filmes);
         setLoading(false);
       })
@@ -206,9 +211,87 @@ export default function Home() {
   }, [buscarTodosOsFilmes, buscarDiretores, buscarAtores, buscarGeneros]);
 
 
+  // const objectRef = useRef(null)
+
+  // // valores atuais (suavizados)
+  // const current = useRef({
+  //   rotation: 0,
+  //   y: 0,
+  // })
+
+  // // valores alvo (controlados pelo scroll)
+  // const target = useRef({
+  //   rotation: 0,
+  //   y: 0,
+  // })
+
+  // const lastScroll = useRef(0)
+
+  // function onLoad(spline) {
+  //   objectRef.current = spline.findObjectByName('Cube') // 👈 troque pelo nome real
+  // }
+
+  // useEffect(() => {
+  //   function onScroll() {
+  //     const scrollY = window.scrollY
+  //     const delta = scrollY - lastScroll.current
+
+  //     // 🔁 rotação (quanto gira por scroll)
+  //     target.current.rotation += delta * 0.002
+
+  //     // ⬆️⬇️ movimento vertical (quanto sobe/desce)
+  //     target.current.y += delta * -0.01
+
+  //     lastScroll.current = scrollY
+  //   }
+
+  //   function animate() {
+  //     if (objectRef.current) {
+  //       // suavização (quanto menor, mais suave)
+  //       current.current.rotation +=
+  //         (target.current.rotation - current.current.rotation) * 0.08
+
+  //       current.current.y +=
+  //         (target.current.y - current.current.y) * 0.08
+
+  //       objectRef.current.rotation.y = current.current.rotation
+  //       objectRef.current.position.y = current.current.y
+  //     }
+
+  //     requestAnimationFrame(animate)
+  //   }
+
+  //   window.addEventListener('scroll', onScroll)
+  //   animate()
+
+  //   return () => window.removeEventListener('scroll', onScroll)
+  // }, [])
+
   return (
     <div className="m-6 mt-8">
-      <div className="flex gap-2 lg:gap-6 mb-6">
+
+
+
+
+      {/* <div className="relative isolate h-screen">
+        <h1 className="fixed top-[200px] left-[200px] text-[100px] z-10 flex gap-[200px]">
+          <span>Será</span> <span>funciona?</span>
+        </h1>
+
+        <Spline
+          onLoad={onLoad}
+          scene="https://prod.spline.design/7VsbzfWN5Kxtihuc/scene.splinecode"
+          className="relative -left-[150px]  z-20"
+          style={{ pointerEvents: 'none' }}
+        />
+
+        <h1 className="fixed top-[200px] left-[420px] text-[100px] z-50 inline-block">
+          que
+        </h1>
+      </div> */}
+
+
+      <div className="flex justify-center gap-2 lg:gap-6 mb-6">
         <button
           className={
             "botaoTipoDeBusca " +
@@ -219,6 +302,7 @@ export default function Home() {
             buscarTodosOsFilmes();
           }}
         >
+          <Clapperboard />
           <p>TODOS OS FILMES</p>
         </button>
         <button
@@ -228,6 +312,7 @@ export default function Home() {
           }
           onClick={() => setTipoSelecionado("diretor")}
         >
+          <UserStar />
           <p>BUSCA POR DIRETOR</p>
         </button>
         <button
@@ -237,6 +322,7 @@ export default function Home() {
           }
           onClick={() => setTipoSelecionado("ator")}
         >
+          <Drama />
           <p>BUSCA POR ATOR</p>
         </button>
         <button
@@ -246,6 +332,7 @@ export default function Home() {
           }
           onClick={() => setTipoSelecionado("genero")}
         >
+          <Film />
           <p>BUSCA POR GÊNERO</p>
         </button>
       </div>
@@ -330,7 +417,7 @@ export default function Home() {
           })}
       </div>
       {buscarMais && (
-        <button className="botaoBuscarMais mt-6" onClick={() => buscarMaisFilmes()}>
+        <button className="botaoBuscarMais mt-6 rounded-lg" onClick={() => buscarMaisFilmes()}>
           + BUSCAR MAIS
         </button>
       )}

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Image from "next/image";
+import { Clapperboard } from "lucide-react";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -30,7 +31,7 @@ export default function RootLayout({
       >
         <div className="w-screen bg-zinc-700 p-4 pl-6 flex justify-between items-center">
           <div className="mt-4 lg:mt-0">
-            <h1>Meu Catálogo de Filmes</h1>
+            <h1 className="flex items-center gap-2"><Clapperboard width={30} className="scale-[130%]" />Meu Catálogo de Filmes</h1>
             <h3 className="">
               Dois em um: um projeto de desenvolvimento e a minha estante de
               filmes favoritos.
@@ -38,15 +39,15 @@ export default function RootLayout({
           </div>
           <div className="flex  gap-4 lg:gap-6 lg:mr-8 absolute lg:static top-3 right-3">
             <a href="https://github.com/contatofabiofg/catalogo-de-filmes-next" target="_blank">
-            <Image src="/github.png" alt="" width={32} height={32} />
+              <Image src="/github.png" alt="" width={32} height={32} className="hover:brightness-110" />
             </a>
             <a href="https://www.linkedin.com/in/contatofabiofg/" target="_blank">
-            <Image src="/linkedin.png" alt="" width={32} height={32} />
+              <Image src="/linkedin.png" alt="" width={32} height={32} className="hover:brightness-110" />
             </a>
           </div>
         </div>
         {children}
-        
+
       </body>
     </html>
   );

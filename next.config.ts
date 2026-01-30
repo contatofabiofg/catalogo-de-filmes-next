@@ -5,7 +5,7 @@ const nextConfig: NextConfig = {
     appIsrStatus: false,
   },
   images: {
-    domains: ['br.web.img2.acsta.net','br.web.img3.acsta.net', 'cdn.britannica.com', 'cinema10.com.br','assets.cinebelasartes.com.br', 'm.media-amazon.com'],
+    domains: ['br.web.img2.acsta.net', 'br.web.img3.acsta.net', 'cdn.britannica.com', 'cinema10.com.br', 'assets.cinebelasartes.com.br', 'www.cinebelasartes.com.br', 'm.media-amazon.com'],
   },
 };
 

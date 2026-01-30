@@ -1,5 +1,5 @@
 export interface IFilme {
-    id_filme: number 
+    id_filme: number
     titulo: string
     id_diretor: number
     nome_diretor: string
@@ -10,4 +10,5 @@ export interface IFilme {
     comentario: string
     trailer: string
     cartaz: string
+    wallpaper: string
 }
