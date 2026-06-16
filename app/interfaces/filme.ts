@@ -10,5 +10,7 @@ export interface IFilme {
     comentario: string
     trailer: string
     cartaz: string
+    banner: string
     wallpaper: string
+    estrelas: number
 }

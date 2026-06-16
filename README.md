@@ -1,4 +1,3 @@
-
 ## Catálogo de Filmes - FRONTEND :vhs:
 
 Para executar o projeto:
@@ -15,9 +14,11 @@ npm run dev
 [Render.com](https://render.com/)<br>
 [Neon.tech.com](https://neon.tech/)<br>
 
-
 :arrow_forward: Para executar este projeto, você precisará criar duas variáveis de ambiente. Para isso, crie um arquivo chamado ".env" na raiz do seu projeto e defina os seguintes valores:
 
 NEXT_PUBLIC_TOKEN=SEUTOKENDEAUTENTICAÇÃO<br>
 NEXT_PUBLIC_SERVIDOR=ENDEREÇODOSEUSERVIDORBACKEND
 
+no n8n:
+contatofabiofg@gmail.com
+program

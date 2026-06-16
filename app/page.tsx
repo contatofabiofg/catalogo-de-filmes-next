@@ -2,6 +2,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState, useCallback } from "react";
 import { CardFilme } from "./components/CardFilme";
+import { CardSugestao } from "./components/CardSugestao";
 import Select from "react-select";
 import { IDiretor } from "./interfaces/diretor";
 import { api } from "./services/axios";
@@ -28,13 +29,17 @@ export default function Home() {
   >();
   const [offset, setOffset] = useState(0);
   const [buscarMais, setBuscarMais] = useState(false);
+  const [filmeSugerido, setFilmeSugerido] = useState<IFilme>();
+
 
 
   useEffect(() => {
     setFilmes([]);
+    setFilmeSugerido(undefined);
     setOffset(0);
     setBuscarMais(false);
   }, [tipoSelecionado]);
+
 
   function buscarFilmes(dados: IReactSelect, categoria: string) {
     setFilmes([]);
@@ -80,9 +85,39 @@ export default function Home() {
     }
   }
 
+  function sugerirFilme() {
+
+    api
+      .get("/count/"
+      )
+      .then((response) => {
+
+        return Math.floor(Math.random() * (response.data.data[0].count)) || 0;
+
+      }).then((response) => {
+
+
+        api
+          .get("/filme/", {
+            params: {
+              id: response,
+            }
+          }
+          )
+          .then((response2) => {
+            debugger
+            setFilmeSugerido(response2.data.filme[0]);
+          })
+
+
+
+      })
+
+
+  }
+
   const buscarTodosOsFilmes = useCallback(() => {
     setLoading(true);
-    console.log('chamou')
     api
       .get("/filmes/", {
         params: {
@@ -92,6 +127,9 @@ export default function Home() {
       }
       )
       .then((response) => {
+        if (!filmes.length) {
+          sugerirFilme()
+        }
         setFilmes(response.data.filmes);
         if (response.data.filmes.length === 10) {
           setBuscarMais(true);
@@ -291,11 +329,11 @@ export default function Home() {
       </div> */}
 
 
-      <div className="flex justify-center gap-2 lg:gap-6 mb-6">
+      <div className="flex  gap-2 lg:gap-6 mb-6">
         <button
           className={
             "botaoTipoDeBusca " +
-            (tipoSelecionado == "todos" ? "!bg-yellow-500 text-black" : "")
+            (tipoSelecionado == "todos" ? "botaoTipoDeBuscaSelecionado text-black" : "")
           }
           onClick={() => {
             setTipoSelecionado("todos");
@@ -308,7 +346,7 @@ export default function Home() {
         <button
           className={
             "botaoTipoDeBusca " +
-            (tipoSelecionado == "diretor" ? "!bg-yellow-500 text-black" : "")
+            (tipoSelecionado == "diretor" ? "botaoTipoDeBuscaSelecionado text-black" : "")
           }
           onClick={() => setTipoSelecionado("diretor")}
         >
@@ -318,7 +356,7 @@ export default function Home() {
         <button
           className={
             "botaoTipoDeBusca " +
-            (tipoSelecionado == "ator" ? "!bg-yellow-500 text-black" : "")
+            (tipoSelecionado == "ator" ? "botaoTipoDeBuscaSelecionado text-black" : "")
           }
           onClick={() => setTipoSelecionado("ator")}
         >
@@ -328,7 +366,7 @@ export default function Home() {
         <button
           className={
             "botaoTipoDeBusca " +
-            (tipoSelecionado == "genero" ? "!bg-yellow-500 text-black" : "")
+            (tipoSelecionado == "genero" ? "botaoTipoDeBuscaSelecionado text-black" : "")
           }
           onClick={() => setTipoSelecionado("genero")}
         >
@@ -396,6 +434,11 @@ export default function Home() {
           </>
         )}
       </AnimatePresence>
+
+      {filmeSugerido && (
+        <CardSugestao filme={filmeSugerido} />
+      )}
+
 
       <div className="flex gap-4 flex-wrap">
         {!filmes.length && loading && (
