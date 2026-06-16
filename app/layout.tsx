@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Image from "next/image";
-import { Clapperboard, Code, Heart, House, Search, Tags, Users } from "lucide-react";
+import { Clapperboard, Code, Heart, House, Search } from "lucide-react";
 import { Input } from "@/components/ui/input"
 
 
@@ -27,7 +27,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
 
-  const ativo = "inicio";
+  //const ativo = "inicio";
 
 
   return (
@@ -40,7 +40,7 @@ export default function RootLayout({
           <div className="mt-[120px]">
             <button
               className={`flex flex-col items-center justify-center gap-2 h-20 w-full transition-all duration-200
-          ${ativo === "inicio"
+          ${true
                   ? "text-yellow-400 border-l-3 border-yellow-400"
                   : "text-slate-400 hover:text-slate-200"
                 }`}
@@ -53,7 +53,7 @@ export default function RootLayout({
 
             <button
               className={`flex flex-col items-center justify-center gap-2 h-20 w-full transition-all duration-200
-          ${ativo === "generos"
+          ${false
                   ? "text-yellow-400 border-l-3 border-yellow-400"
                   : "text-slate-400 hover:text-slate-200"
                 }`}
@@ -64,7 +64,7 @@ export default function RootLayout({
 
             <button
               className={`flex flex-col items-center justify-center gap-2 h-20 w-full transition-all duration-200
-          ${ativo === "favoritos"
+          ${false
                   ? "text-yellow-400 border-l-3 border-yellow-400"
                   : "text-slate-400 hover:text-slate-200"
                 }`}

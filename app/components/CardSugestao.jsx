@@ -1,10 +1,9 @@
-import { useRouter } from 'next/navigation'
-import { Bookmark, Calendar, Clapperboard, Star } from "lucide-react";
+
+import { Bookmark, Star } from "lucide-react";
 import Link from 'next/link';
 
 export function CardSugestao({ filme }) {
 
-    const router = useRouter()
 
     return (
         <div className="cardSugestao">
